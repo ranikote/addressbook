@@ -1,33 +1,25 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: project-k8s-deployment
-spec:
-  replicas: 3 
-  selector:
-    matchLabels:
-      app: project-k8s
-  template:
-    metadata:
-      labels:
-        app: project-k8s
-    spec:
-      containers:
-      - name: project-k8s
-        image: tampoohoonm/project-k8s:latest
-        ports:
-        - containerPort: 8080  
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: project-k8s-service
-spec:
-  type: LoadBalancer
-  selector:
-    app: project-k8s
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080 
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  javaVersion: '17'
+
+steps:
+  - task: UseJavaVersion@1
+    inputs:
+      versionSpec: '$(javaVersion)'
+      architecture: 'x64'
+    displayName: 'Set up Java $(javaVersion)'
+
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean package'
+      options: '-Xmx1024m'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    displayName: 'Build and test with Maven'
