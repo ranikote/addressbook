@@ -56,7 +56,7 @@
         </dependency>
         <!-- The huge set of awesome Java libraries are available as such 
             for Vaadin developers, you should take the advantage of those. In this app 
-            we just use the commons-beanutils to help implementing the fake backend. -->
+            we just use the commons-beanutils to help implementing the fake backend. ok-->
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
